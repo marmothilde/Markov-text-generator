@@ -1,4 +1,4 @@
-package types;
+package org.marmothilde.markov_text_generator.types;
 
 import java.util.ArrayList;
 import java.util.List;

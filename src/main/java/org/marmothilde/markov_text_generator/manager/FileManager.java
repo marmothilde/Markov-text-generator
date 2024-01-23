@@ -1,8 +1,9 @@
-package manager;
+package org.marmothilde.markov_text_generator.manager;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,14 +12,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import types.Word;
+import org.marmothilde.markov_text_generator.types.Word;
 
 public class FileManager {
 
 	private final String FILE_NAME = "text.txt";
 
 	public HashMap<String, Word> scanFile() throws IOException {
-		File doc = new File(FILE_NAME);
+		URL url = this.getClass().getClassLoader().getResource(FILE_NAME);
+
+		File doc = new File(url.getFile());
 
 		HashMap<String, Word> result = new HashMap<>();
 		List<String[]> fileContent = readFile(doc);
@@ -49,7 +52,7 @@ public class FileManager {
 		List<String[]> fileContent = new ArrayList<>();
 
 		Path path = Paths.get(doc.toURI());
-		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.ISO_8859_1)) {
+		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line += " \n";

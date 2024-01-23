@@ -1,36 +1,49 @@
-package manager;
+package org.marmothilde.markov_text_generator.manager;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import types.Word;
+import org.marmothilde.markov_text_generator.types.Word;
 
 public class GenerationManager {
 
-	public String generate(HashMap<String, Word> fileContent) throws Exception {
-		generateProba(fileContent);
+	HashMap<String, Word> dictionnary;
+
+	public GenerationManager() {
+		FileManager fileManager = new FileManager();
+		HashMap<String, Word> fileContent = null;
+		try {
+			fileContent = fileManager.scanFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (fileContent != null) {
+			this.dictionnary = fileContent;
+			generateProba();
+		}
+	}
+
+	public String generate() throws Exception {
+
 		StringBuilder result = new StringBuilder();
-
 		int cpt = 0;
-
 		Word word;
 		String wordString = "";
 
 		do {
-
 			if (cpt == 0) {
 				try {
-					word = generateNextWord(fileContent.get("."));
+					word = generateNextWord(dictionnary.get("."));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					System.err.println(cpt);
 					throw e;
 				}
 			} else {
 				try {
-					word = generateNextWord(fileContent.get(wordString));
+					word = generateNextWord(dictionnary.get(wordString));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					System.err.println(cpt);
 					throw e;
 				}
@@ -41,7 +54,7 @@ public class GenerationManager {
 				result.append(word.getWord()).append(" ");
 			}
 			cpt++;
-		} while (cpt <= 1000);
+		} while (cpt <= 1000 || (cpt > 1000 && !".".equals(word.getWord())));
 
 		return result.toString();
 
@@ -68,10 +81,9 @@ public class GenerationManager {
 	/**
 	 * Set the probability of each word to come after the current one
 	 * 
-	 * @param fileContent
 	 */
-	private void generateProba(HashMap<String, Word> fileContent) {
-		for (Map.Entry<String, Word> entry : fileContent.entrySet()) {
+	private void generateProba() {
+		for (Map.Entry<String, Word> entry : dictionnary.entrySet()) {
 			Word currentWord = entry.getValue();
 
 			int occurence = currentWord.getOccurence();
