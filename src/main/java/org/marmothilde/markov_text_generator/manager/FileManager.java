@@ -52,7 +52,7 @@ public class FileManager {
 		List<String[]> fileContent = new ArrayList<>();
 
 		Path path = Paths.get(doc.toURI());
-		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.ISO_8859_1)) {
+		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line += " \n";

@@ -10,14 +10,11 @@ public class GenerationManager {
 	public String generate(HashMap<String, Word> fileContent) throws Exception {
 		generateProba(fileContent);
 		StringBuilder result = new StringBuilder();
-
 		int cpt = 0;
-
 		Word word;
 		String wordString = "";
 
 		do {
-
 			if (cpt == 0) {
 				try {
 					word = generateNextWord(fileContent.get("."));
@@ -39,7 +36,7 @@ public class GenerationManager {
 				result.append(word.getWord()).append(" ");
 			}
 			cpt++;
-		} while (cpt <= 1000);
+		} while (cpt <= 1000 || (cpt > 1000 && !".".equals(word.getWord())));
 
 		return result.toString();
 
