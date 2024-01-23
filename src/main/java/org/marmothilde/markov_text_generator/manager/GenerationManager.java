@@ -1,9 +1,9 @@
-package manager;
+package org.marmothilde.markov_text_generator.manager;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import types.Word;
+import org.marmothilde.markov_text_generator.types.Word;
 
 public class GenerationManager {
 
@@ -22,7 +22,6 @@ public class GenerationManager {
 				try {
 					word = generateNextWord(fileContent.get("."));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					System.err.println(cpt);
 					throw e;
 				}
@@ -30,7 +29,6 @@ public class GenerationManager {
 				try {
 					word = generateNextWord(fileContent.get(wordString));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					System.err.println(cpt);
 					throw e;
 				}

@@ -1,4 +1,4 @@
-package manager;
+package org.marmothilde.markov_text_generator.manager;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import types.Word;
+import org.marmothilde.markov_text_generator.types.Word;
 
 public class FileManager {
 

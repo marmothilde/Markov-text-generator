@@ -1,11 +1,16 @@
+package org.marmothilde.markov_text_generator;
+
 import java.io.IOException;
 import java.util.HashMap;
 
-import manager.FileManager;
-import manager.GenerationManager;
-import types.Word;
+import org.marmothilde.markov_text_generator.manager.FileManager;
+import org.marmothilde.markov_text_generator.manager.GenerationManager;
+import org.marmothilde.markov_text_generator.types.Word;
 
-public class Main {
+/**
+ * JavaFX App
+ */
+public class App {
 
 	public static void main(String[] args) throws IOException {
 
