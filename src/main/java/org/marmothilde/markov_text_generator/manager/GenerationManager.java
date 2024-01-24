@@ -1,7 +1,9 @@
 package org.marmothilde.markov_text_generator.manager;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.marmothilde.markov_text_generator.types.Word;
@@ -9,6 +11,8 @@ import org.marmothilde.markov_text_generator.types.Word;
 public class GenerationManager {
 
 	HashMap<String, Word> dictionnary;
+
+	List<String> specialCharacter;
 
 	public GenerationManager() {
 		FileManager fileManager = new FileManager();
@@ -23,6 +27,12 @@ public class GenerationManager {
 			this.dictionnary = fileContent;
 			generateProba();
 		}
+		specialCharacter = new ArrayList<>();
+		specialCharacter.add(".");
+		specialCharacter.add("\n");
+		specialCharacter.add("\n\r");
+		specialCharacter.add(")");
+		specialCharacter.add(":");
 	}
 
 	public String generate() throws Exception {
@@ -31,31 +41,52 @@ public class GenerationManager {
 		int cpt = 0;
 		Word word;
 		String wordString = "";
+		int openParenthesis = 0;
+		int randomsafe = 0;
 
-		do {
-			if (cpt == 0) {
-				try {
-					word = generateNextWord(dictionnary.get("."));
-				} catch (Exception e) {
-					System.err.println(cpt);
-					throw e;
-				}
-			} else {
-				try {
+		try {
+			do {
+				if (cpt == 0) {
+					do {
+						word = generateNextWord(dictionnary.get("."));
+					} while (specialCharacter.contains(word.getWord()));
+
+				} else {
 					word = generateNextWord(dictionnary.get(wordString));
-				} catch (Exception e) {
-					System.err.println(cpt);
-					throw e;
+
+					if (word.getWord().equals("(")) {
+						openParenthesis++;
+					}
+					if (word.getWord().equals(")") && openParenthesis > 0) {
+						openParenthesis--;
+					}
+					if (word.getWord().equals(")") && openParenthesis == 0) {
+						do {
+							word = generateNextWord(dictionnary.get(wordString));
+							randomsafe++;
+						} while (word.getWord().equals(")") && randomsafe < 100);
+						randomsafe = 0;
+					}
+
+					if (specialCharacter.contains(word.getWord()) && openParenthesis > 0) {
+						do {
+							result.append(")");
+							openParenthesis--;
+						} while (openParenthesis > 0);
+					}
+
 				}
-			}
+				if (word != null) {
+					wordString = word.getWord();
+					result.append(word.getWord()).append(" ");
+				}
+				cpt++;
+			} while (cpt <= 1000 || (cpt > 1000 && !".".equals(word.getWord())));
 
-			if (word != null) {
-				wordString = word.getWord();
-				result.append(word.getWord()).append(" ");
-			}
-			cpt++;
-		} while (cpt <= 1000 || (cpt > 1000 && !".".equals(word.getWord())));
-
+		} catch (Exception e) {
+			System.err.println(cpt);
+			throw e;
+		}
 		return result.toString();
 
 	}
