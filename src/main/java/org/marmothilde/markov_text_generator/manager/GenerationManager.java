@@ -10,6 +10,8 @@ import org.marmothilde.markov_text_generator.types.Word;
 
 public class GenerationManager {
 
+	private final int MAX_WORD = 1;
+
 	HashMap<String, Word> dictionnary;
 
 	List<String> specialCharacter;
@@ -81,7 +83,7 @@ public class GenerationManager {
 					result.append(word.getWord()).append(" ");
 				}
 				cpt++;
-			} while (cpt <= 1000 || (cpt > 1000 && !".".equals(word.getWord())));
+			} while (cpt <= MAX_WORD || (cpt > MAX_WORD && !".".equals(word.getWord())));
 
 		} catch (Exception e) {
 			System.err.println(cpt);
